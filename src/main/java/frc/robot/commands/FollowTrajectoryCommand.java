@@ -5,16 +5,16 @@ package frc.robot.commands;
 // the WPILib BSD license file in the root directory of this project.
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.DriveSubsystem;
 import org.frcteam3539.Byte_Swerve_Lib.control.Trajectory;
 
 public class FollowTrajectoryCommand extends Command {
 
-	private final CommandSwerveDrivetrain drivetrain;
+	private final DriveSubsystem drivetrain;
 
 	private final Trajectory trajectory;
 
-	public FollowTrajectoryCommand(CommandSwerveDrivetrain drivetrain, Trajectory trajectory) {
+	public FollowTrajectoryCommand(DriveSubsystem drivetrain, Trajectory trajectory) {
 		this.drivetrain = drivetrain;
 		this.trajectory = trajectory;
 

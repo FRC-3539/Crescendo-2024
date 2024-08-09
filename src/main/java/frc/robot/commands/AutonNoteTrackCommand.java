@@ -13,15 +13,17 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class AutonNoteTrackCommand extends Command {
 	double speedMultiplier = DrivetrainConstants.speedMultiplier;
 	double rotationSpeedMultiplier = DrivetrainConstants.rotationSpeedMultiplier;
-	double maxRotationalVelocity = RobotContainer.drivetrainSubsystem.maxRotationalVelocity;
-	double maxVelocity = RobotContainer.drivetrainSubsystem.maxVelocity;
+	double maxRotationalVelocity = DriveSubsystem.maxRotationalVelocity;
+	double maxVelocity = DriveSubsystem.maxVelocity;
 	int noNoteCounter = 0;
 
 	private PidController rotationController;
@@ -53,7 +55,7 @@ public class AutonNoteTrackCommand extends Command {
 	public void execute() {
 		SwerveRequest request = idleRequest;
 
-		var target = RobotContainer.visionSubsystem.getBestFrontNote();
+		var target = VisionSubsystem.getBestFrontNote();
 		if (target != null & !IntakeSubsystem.getBackSensor() & !IntakeSubsystem.getFrontSensor()
 				& !IntakeSubsystem.getChamberSensor() & !ShooterSubsystem.getShooterSensor()) {
 			noNoteCounter = 0;
@@ -61,13 +63,14 @@ public class AutonNoteTrackCommand extends Command {
 
 			double noteTrackSpeedMultiplier = 0.5;
 			var angleToTarget = -target.getYaw() * Math.PI / 180;
-			rotationController.setSetpoint(
-					RobotContainer.drivetrainSubsystem.getPose2d().getRotation().getRadians() + angleToTarget);
+			rotationController
+					.setSetpoint(RobotContainer.driveSubsystem.getPose2d().getRotation().getRadians() + angleToTarget);
 			request = driveRobotCentric.withVelocityX(maxVelocity * noteTrackSpeedMultiplier).withVelocityY(0);
-			driveRobotCentric.withRotationalRate(rotationController
-					.calculate(RobotContainer.drivetrainSubsystem.getPose2d().getRotation().getRadians(), 0.02)
-					* maxRotationalVelocity * .3).withRotationalDeadband(0);
-			RobotContainer.drivetrainSubsystem.applyRequest(request);
+			driveRobotCentric.withRotationalRate(
+					rotationController.calculate(RobotContainer.driveSubsystem.getPose2d().getRotation().getRadians(),
+							0.02) * maxRotationalVelocity * .3)
+					.withRotationalDeadband(0);
+			DriveSubsystem.applyRequest(request);
 
 		} else {
 			noNoteCounter++;
@@ -80,7 +83,7 @@ public class AutonNoteTrackCommand extends Command {
 	@Override
 	public void end(boolean interrupted) {
 		LedSubsystem.setNoteTracking(false);
-		RobotContainer.drivetrainSubsystem.applyRequest(idleRequest);
+		DriveSubsystem.applyRequest(idleRequest);
 	}
 
 	// Returns true when the command should end.

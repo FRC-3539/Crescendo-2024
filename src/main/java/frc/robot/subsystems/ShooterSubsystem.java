@@ -227,8 +227,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
 	public static double getEstimatedShooterAngle() {
 		double distanceToTarget = 0;
-		distanceToTarget = RobotContainer.drivetrainSubsystem.getPose2d().getTranslation()
-				.getDistance(RobotContainer.drivetrainSubsystem.getOffsetTarget());
+		distanceToTarget = RobotContainer.driveSubsystem.getPose2d().getTranslation()
+				.getDistance(DriveSubsystem.getOffsetTarget());
 		SmartDashboard.putNumber("/Drivetrain/DistanceToTarget", distanceToTarget);
 
 		// double angleToTarget = (Math.atan2(0.64135 - 2.0452 + targetZOffset,

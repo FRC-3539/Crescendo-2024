@@ -31,7 +31,7 @@ public class Blue3NoteTracking extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/Blue3NoteTracking.txt", true);
 	Trajectory[] trajectories = loader.getTrajectories();
 	private Command[] sequence = {
-		new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+		new InstantCommand(() -> RobotContainer.driveSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
 		new ParallelCommandGroup(
 			new RevUpCommand(false, ShooterConstants.shootDps).withTimeout(15),
 			new SequentialCommandGroup(
@@ -40,15 +40,15 @@ public class Blue3NoteTracking extends SequentialCommandGroup {
 					new WaitCommand(0.4)
 						.andThen(new ShootCommand().withTimeout(1)),
 					new WaitCommand(0.2)
-						.andThen(new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, trajectories[0]))
+						.andThen(new FollowTrajectoryCommand(RobotContainer.driveSubsystem, trajectories[0]))
 						.andThen(new AutonNoteTrackCommand().withTimeout(1))
-						.andThen(new ReturnToPathCommand(RobotContainer.drivetrainSubsystem, trajectories[1])),
+						.andThen(new ReturnToPathCommand(RobotContainer.driveSubsystem, trajectories[1])),
 					new WaitCommand(2.5)
 						.andThen(new IntakeCommand(true, IntakeMode.FRONT).withTimeout(3))
 				),
 				// Return and shoot second note
 				new ParallelCommandGroup(
-					new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, trajectories[1]).andThen(new WaitCommand(0.3)).andThen(new ShootCommand().withTimeout(.5))
+					new FollowTrajectoryCommand(RobotContainer.driveSubsystem, trajectories[1]).andThen(new WaitCommand(0.3)).andThen(new ShootCommand().withTimeout(.5))
 						.andThen(new HomePositionCommand()),
 					new WaitCommand(.5)
 						.andThen(new AngleShooterCommand(-25))
@@ -56,15 +56,15 @@ public class Blue3NoteTracking extends SequentialCommandGroup {
 				),
 				// Go pick up third note
 				new ParallelCommandGroup(
-					new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, trajectories[2])
+					new FollowTrajectoryCommand(RobotContainer.driveSubsystem, trajectories[2])
 						.andThen(new AutonNoteTrackCommand().withTimeout(1))
-						.andThen(new ReturnToPathCommand(RobotContainer.drivetrainSubsystem, trajectories[3])),
+						.andThen(new ReturnToPathCommand(RobotContainer.driveSubsystem, trajectories[3])),
 					new WaitCommand(2)
 						.andThen(new IntakeCommand(true, IntakeMode.FRONT).withTimeout(5))
 				),
 				// Return and shoot third note
 				new ParallelCommandGroup(
-					new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, trajectories[3]).andThen(new WaitCommand(0.1)).andThen(new ShootCommand().withTimeout(1)),
+					new FollowTrajectoryCommand(RobotContainer.driveSubsystem, trajectories[3]).andThen(new WaitCommand(0.1)).andThen(new ShootCommand().withTimeout(1)),
 					new WaitCommand(0.5).andThen(new AngleShooterCommand(-24.5))
 				)
 			)

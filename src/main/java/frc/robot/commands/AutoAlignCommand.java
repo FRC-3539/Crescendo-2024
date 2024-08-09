@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LedSubsystem;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.frcteam3539.Byte_Swerve_Lib.control.MaxAccelerationConstraint;
@@ -70,12 +70,12 @@ public class AutoAlignCommand extends Command {
 	@Override
 	public void initialize() {
 		LedSubsystem.setAligning(true);
-		Pose2d robotPose = RobotContainer.drivetrainSubsystem.getPose2d();
+		Pose2d robotPose = RobotContainer.driveSubsystem.getPose2d();
 
 		Pose2d target = robotPose.nearest(points);
 
 		// Generate trajectory command to nearest coordinate
-		RobotContainer.drivetrainSubsystem.getFollower()
+		DriveSubsystem.getFollower()
 				.follow(new Trajectory(new SimplePathBuilder(robotPose).lineTo(target).build(),
 						new TrajectoryConstraint[]{(TrajectoryConstraint) new MaxAccelerationConstraint(3),
 								(TrajectoryConstraint) new MaxVelocityConstraint(3)},
@@ -95,12 +95,12 @@ public class AutoAlignCommand extends Command {
 	public void end(boolean interrupted) {
 		LedSubsystem.setAligning(false);
 
-		RobotContainer.drivetrainSubsystem.getFollower().cancel();
+		DriveSubsystem.getFollower().cancel();
 	}
 
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return RobotContainer.drivetrainSubsystem.getFollower().getCurrentTrajectory().isEmpty();
+		return DriveSubsystem.getFollower().getCurrentTrajectory().isEmpty();
 	}
 }

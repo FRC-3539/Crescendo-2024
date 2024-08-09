@@ -32,24 +32,24 @@ import org.frcteam3539.Byte_Swerve_Lib.control.Trajectory;
 import org.frcteam3539.Byte_Swerve_Lib.util.DrivetrainFeedforwardConstants;
 import org.frcteam3539.Byte_Swerve_Lib.util.HolonomicFeedforward;
 
-public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
+public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
 	/** Creates a new DrivetrainSubsystem. */
-	private final HolonomicMotionProfiledTrajectoryFollower follower;
+	private static HolonomicMotionProfiledTrajectoryFollower follower;
 
-	private SwerveRequest swerveRequest = new SwerveRequest.Idle();
+	private static SwerveRequest swerveRequest = new SwerveRequest.Idle();
 
-	Translation2d blueSpeakerCoordinate = new Translation2d(0, 5.55);
-	Translation2d redSpeakerCoordinate = new Translation2d(0, 2.67);
+	static Translation2d blueSpeakerCoordinate = new Translation2d(0, 5.55);
+	static Translation2d redSpeakerCoordinate = new Translation2d(0, 2.67);
 
-	public double velocityX = 0.0;
-	public double velocityY = 0.0;
+	public static double velocityX = 0.0;
+	public static double velocityY = 0.0;
 
-	public double maxVelocity = 0.0;
-	public double maxRotationalVelocity = 0.0;
+	public static double maxVelocity = 0.0;
+	public static double maxRotationalVelocity = 0.0;
 
-	public Pigeon2 pigeon = new Pigeon2(IDConstants.PigeonID, "canivore");
+	public static Pigeon2 pigeon = new Pigeon2(IDConstants.PigeonID, "canivore");
 
-	public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
+	public DriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
 		super(driveTrainConstants, modules);
 
 		maxVelocity = modules[0].SpeedAt12VoltsMps;
@@ -79,49 +79,49 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 				new HolonomicFeedforward(FEEDFORWARD_CONSTANTS));
 	}
 
-	public HolonomicMotionProfiledTrajectoryFollower getFollower() {
+	public static HolonomicMotionProfiledTrajectoryFollower getFollower() {
 		return follower;
 	}
 
 	public void seedFieldRelative(Trajectory trajectory) {
-		this.seedFieldRelative(trajectory.calculate(0).getPathState().getPose2d());
+		seedFieldRelative(trajectory.calculate(0).getPathState().getPose2d());
 	}
 
 	public Pose2d getPose2d() {
 		return m_odometry.getEstimatedPosition();
 	}
 
-	public void applyRequest(SwerveRequest request) {
-		this.swerveRequest = request;
+	public static void applyRequest(SwerveRequest request) {
+		swerveRequest = request;
 	}
 
-	public void cancelPath() {
+	public static void cancelPath() {
 		follower.cancel();
 	}
 
-	public void followPath(Trajectory t) {
+	public static void followPath(Trajectory t) {
 		follower.follow(t);
 	}
 
-	public Rotation2d getRobotRoll() {
+	public static Rotation2d getRobotRoll() {
 		return Rotation2d.fromDegrees(
 				BaseStatusSignal.getLatencyCompensatedValue(pigeon.getRoll(), pigeon.getAngularVelocityYDevice()));
 	}
-	public Translation2d getOffsetTarget() {
+	public static Translation2d getOffsetTarget() {
 		Translation2d offsetTarget;
 		double noteSpeed = 16;
 		double distanceToTarget = 0;
 		if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
 			distanceToTarget = Math.sqrt(Math.pow(
-					RobotContainer.drivetrainSubsystem.getPose2d().getTranslation().getDistance(redSpeakerCoordinate),
-					2) + Math.pow(2.05, 2));
+					RobotContainer.driveSubsystem.getPose2d().getTranslation().getDistance(redSpeakerCoordinate), 2)
+					+ Math.pow(2.05, 2));
 			double timeToTarget = distanceToTarget / noteSpeed;
 			offsetTarget = new Translation2d(redSpeakerCoordinate.getX() - velocityX * timeToTarget,
 					redSpeakerCoordinate.getY() - velocityY * timeToTarget);
 		} else {
 			distanceToTarget = Math.sqrt(Math.pow(
-					RobotContainer.drivetrainSubsystem.getPose2d().getTranslation().getDistance(blueSpeakerCoordinate),
-					2) + Math.pow(2.05, 2));
+					RobotContainer.driveSubsystem.getPose2d().getTranslation().getDistance(blueSpeakerCoordinate), 2)
+					+ Math.pow(2.05, 2));
 			double timeToTarget = distanceToTarget / noteSpeed;
 			offsetTarget = new Translation2d(blueSpeakerCoordinate.getX() - velocityX * timeToTarget,
 					blueSpeakerCoordinate.getY() - velocityY * timeToTarget);

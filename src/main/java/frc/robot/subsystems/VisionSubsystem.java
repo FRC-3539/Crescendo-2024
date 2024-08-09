@@ -28,29 +28,29 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class VisionSubsystem extends Thread {
 
 	// Vision Variables
-	AprilTagFieldLayout aprilTagFieldLayout;
+	static AprilTagFieldLayout aprilTagFieldLayout;
 
-	public PhotonCamera backLeftCam;
+	public static PhotonCamera backLeftCam;
 	Transform3d robotToBackLeftCam = new Transform3d(new Translation3d(-0.3302, 0.2286, 0.53975),
 			new Rotation3d(Math.toRadians(0), Math.toRadians(-16.5), Math.toRadians(180)));
 
-	public PhotonCamera backRightCam;
+	public static PhotonCamera backRightCam;
 	Transform3d robotToBackRightCam = new Transform3d(new Translation3d(-0.3302, -0.2286, 0.53975),
 			new Rotation3d(Math.toRadians(0), Math.toRadians(-16.3), Math.toRadians(180)));
 
-	public PhotonCamera frontNoteCam;
-	public PhotonCamera backNoteCam;
+	public static PhotonCamera frontNoteCam;
+	public static PhotonCamera backNoteCam;
 
-	PhotonPoseEstimator backLeftPhotonPoseEstimator;
-	PhotonPoseEstimator backRightPhotonPoseEstimator;
+	static PhotonPoseEstimator backLeftPhotonPoseEstimator;
+	static PhotonPoseEstimator backRightPhotonPoseEstimator;
 
-	Optional<EstimatedRobotPose> resultBackLeft;
-	Optional<EstimatedRobotPose> resultBackRight;
-	boolean useVision = true;
-	double backLeftLastTimeStamp = 0;
-	double backRightLastTimeStamp = 0;
+	static Optional<EstimatedRobotPose> resultBackLeft;
+	static Optional<EstimatedRobotPose> resultBackRight;
+	static boolean useVision = true;
+	static double backLeftLastTimeStamp = 0;
+	static double backRightLastTimeStamp = 0;
 
-	double visionRatio = 10;
+	static double visionRatio = 10;
 
 	public VisionSubsystem() {
 		super();
@@ -78,20 +78,20 @@ public class VisionSubsystem extends Thread {
 
 	// Vision Methods
 
-	public Optional<EstimatedRobotPose> getEstimatedBackLeftGlobalPose() {
+	public static Optional<EstimatedRobotPose> getEstimatedBackLeftGlobalPose() {
 		return backLeftPhotonPoseEstimator.update();
 	}
 
-	public Optional<EstimatedRobotPose> getEstimatedBackRightGlobalPose() {
+	public static Optional<EstimatedRobotPose> getEstimatedBackRightGlobalPose() {
 		return backRightPhotonPoseEstimator.update();
 	}
 
-	public void useVision(boolean useVision) {
-		this.useVision = useVision;
+	public static void useVision(boolean UseVision) {
+		useVision = UseVision;
 	}
 
-	public void setVisionWeights(double visionX, double visionY, double visionDeg) {
-		RobotContainer.drivetrainSubsystem
+	public static void setVisionWeights(double visionX, double visionY, double visionDeg) {
+		RobotContainer.driveSubsystem
 				.setVisionMeasurementStdDevs(VecBuilder.fill(visionX, visionY, Units.degreesToRadians(visionDeg)));
 	}
 
@@ -101,11 +101,11 @@ public class VisionSubsystem extends Thread {
 	}
 
 	Alliance lastAlliance = null;
-	public void addVisionMeasurement(Pose2d pose, double timestampSeconds, Matrix<N3, N1> weights) {
-		RobotContainer.drivetrainSubsystem.addVisionMeasurement(pose, timestampSeconds, weights);
+	public static void addVisionMeasurement(Pose2d pose, double timestampSeconds, Matrix<N3, N1> weights) {
+		RobotContainer.driveSubsystem.addVisionMeasurement(pose, timestampSeconds, weights);
 	}
 
-	public void log() {
+	public static void log() {
 		SmartDashboard.putBoolean("/Vision/BackLeft/Connected", backLeftCam.isConnected());
 		SmartDashboard.putBoolean("/Vision/BackRight/Connected", backRightCam.isConnected());
 
@@ -113,7 +113,7 @@ public class VisionSubsystem extends Thread {
 		SmartDashboard.putBoolean("/Vision/BackNoteCam/Connected", backNoteCam.isConnected());
 
 	}
-	public Matrix<N3, N1> getVisionWeights(double distanceRatio, int numTargets) {
+	public static Matrix<N3, N1> getVisionWeights(double distanceRatio, int numTargets) {
 		double targetMultiplier = 1;
 		double visionCutOffDistance = 4;
 		distanceRatio = 0.1466 * Math.pow(1.6903, distanceRatio);
@@ -126,12 +126,12 @@ public class VisionSubsystem extends Thread {
 		return VecBuilder.fill(distanceRatio * targetMultiplier, distanceRatio * targetMultiplier,
 				3 + 15 * distanceRatio * targetMultiplier);
 	}
-	public PhotonTrackedTarget getBestFrontNote() {
+	public static PhotonTrackedTarget getBestFrontNote() {
 		var result = frontNoteCam.getLatestResult();
 		var bestTarget = result.getBestTarget();
 		return bestTarget;
 	}
-	public PhotonTrackedTarget getBestBackNote() {
+	public static PhotonTrackedTarget getBestBackNote() {
 		var result = backNoteCam.getLatestResult();
 		var bestTarget = result.getBestTarget();
 		return bestTarget;
@@ -161,8 +161,8 @@ public class VisionSubsystem extends Thread {
 			backLeftPhotonPoseEstimator.setFieldTags(aprilTagFieldLayout);
 			backRightPhotonPoseEstimator.setFieldTags(aprilTagFieldLayout);
 
-			this.resultBackLeft = getEstimatedBackLeftGlobalPose();
-			this.resultBackRight = getEstimatedBackRightGlobalPose();
+			resultBackLeft = getEstimatedBackLeftGlobalPose();
+			resultBackRight = getEstimatedBackRightGlobalPose();
 
 			if (useVision) {
 
@@ -186,8 +186,8 @@ public class VisionSubsystem extends Thread {
 					if (backLeftTimeStamp != backLeftLastTimeStamp) {
 						publishPose2d("/DriveTrain/BackLeftCamPose", camPoseBackLeft.estimatedPose.toPose2d());
 						SmartDashboard.putString("/Vision/BackLeftWeights", weights.toString());
-						RobotContainer.drivetrainSubsystem.addVisionMeasurement(
-								camPoseBackLeft.estimatedPose.toPose2d(), backLeftTimeStamp, weights);
+						RobotContainer.driveSubsystem.addVisionMeasurement(camPoseBackLeft.estimatedPose.toPose2d(),
+								backLeftTimeStamp, weights);
 
 					}
 					backLeftLastTimeStamp = backLeftTimeStamp;
@@ -214,8 +214,8 @@ public class VisionSubsystem extends Thread {
 					if (backRightTimeStamp != backRightLastTimeStamp) {
 						publishPose2d("/DriveTrain/BackRightCamPose", camPoseBackRight.estimatedPose.toPose2d());
 						SmartDashboard.putString("/Vision/BackRightWeights", weights.toString());
-						RobotContainer.drivetrainSubsystem.addVisionMeasurement(
-								camPoseBackRight.estimatedPose.toPose2d(), backRightTimeStamp, weights);
+						RobotContainer.driveSubsystem.addVisionMeasurement(camPoseBackRight.estimatedPose.toPose2d(),
+								backRightTimeStamp, weights);
 					}
 					backRightLastTimeStamp = backRightTimeStamp;
 				}

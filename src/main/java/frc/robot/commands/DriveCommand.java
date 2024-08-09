@@ -15,9 +15,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.constants.DrivetrainConstants;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class DriveCommand extends Command {
 	Translation2d blueSpeakerCoordinate = new Translation2d(0, 5.55);
@@ -25,9 +27,9 @@ public class DriveCommand extends Command {
 	/** Creates a new DriveCommand. */
 	private PidController rotationController;
 
-	double maxVelocity = RobotContainer.drivetrainSubsystem.maxVelocity;
+	double maxVelocity = DriveSubsystem.maxVelocity;
 
-	double maxRotationalVelocity = RobotContainer.drivetrainSubsystem.maxRotationalVelocity;
+	double maxRotationalVelocity = DriveSubsystem.maxRotationalVelocity;
 
 	double rotationDeadband = maxRotationalVelocity * 0.02;
 	private final SwerveRequest.FieldCentric driveFieldCentric = new SwerveRequest.FieldCentric()
@@ -39,7 +41,7 @@ public class DriveCommand extends Command {
 			.withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
 
 	public DriveCommand() {
-		addRequirements(RobotContainer.drivetrainSubsystem);
+		addRequirements(RobotContainer.driveSubsystem);
 
 		rotationController = new PidController(new PidConstants(DrivetrainConstants.AlignkP, 0, 0));
 
@@ -86,42 +88,44 @@ public class DriveCommand extends Command {
 		}
 		if (RobotContainer.driverButtonA.getAsBoolean()) {
 			LedSubsystem.setShootAligning(true);
-			rotationController.setSetpoint(RobotContainer.drivetrainSubsystem.getPose2d().getTranslation()
-					.minus(RobotContainer.drivetrainSubsystem.getOffsetTarget()).getAngle().getRadians());
+			rotationController.setSetpoint(RobotContainer.driveSubsystem.getPose2d().getTranslation()
+					.minus(DriveSubsystem.getOffsetTarget()).getAngle().getRadians());
 
-			driveRobotCentric.withRotationalRate(rotationController
-					.calculate(RobotContainer.drivetrainSubsystem.getPose2d().getRotation().getRadians(), 0.02)
-					* maxRotationalVelocity * .3).withRotationalDeadband(0);
-			driveFieldCentric.withRotationalRate(rotationController
-					.calculate(RobotContainer.drivetrainSubsystem.getPose2d().getRotation().getRadians(), 0.02)
-					* maxRotationalVelocity * .3).withRotationalDeadband(0);
+			driveRobotCentric.withRotationalRate(
+					rotationController.calculate(RobotContainer.driveSubsystem.getPose2d().getRotation().getRadians(),
+							0.02) * maxRotationalVelocity * .3)
+					.withRotationalDeadband(0);
+			driveFieldCentric.withRotationalRate(
+					rotationController.calculate(RobotContainer.driveSubsystem.getPose2d().getRotation().getRadians(),
+							0.02) * maxRotationalVelocity * .3)
+					.withRotationalDeadband(0);
 
 		} else {
 			LedSubsystem.setShootAligning(false);
 
 		}
 		if (RobotContainer.driverButtonB.getAsBoolean()) {
-			var target = RobotContainer.visionSubsystem.getBestBackNote();
+			var target = VisionSubsystem.getBestBackNote();
 			if (target != null & !IntakeSubsystem.getBackSensor() & !IntakeSubsystem.getFrontSensor()
 					& !IntakeSubsystem.getChamberSensor() & !ShooterSubsystem.getShooterSensor()) {
 				LedSubsystem.setNoteTracking(true);
 				double noteTrackSpeedMultiplier = 0.3;
 				var angleToTarget = -target.getYaw() * Math.PI / 180;
 				rotationController.setSetpoint(
-						RobotContainer.drivetrainSubsystem.getPose2d().getRotation().getRadians() + angleToTarget);
+						RobotContainer.driveSubsystem.getPose2d().getRotation().getRadians() + angleToTarget);
 				request = driveRobotCentric.withVelocityX(-maxVelocity * noteTrackSpeedMultiplier).withVelocityY(0);
 				driveRobotCentric.withRotationalRate(rotationController
-						.calculate(RobotContainer.drivetrainSubsystem.getPose2d().getRotation().getRadians(), 0.02)
+						.calculate(RobotContainer.driveSubsystem.getPose2d().getRotation().getRadians(), 0.02)
 						* maxRotationalVelocity * .3).withRotationalDeadband(0);
 				driveFieldCentric.withRotationalRate(rotationController
-						.calculate(RobotContainer.drivetrainSubsystem.getPose2d().getRotation().getRadians(), 0.02)
+						.calculate(RobotContainer.driveSubsystem.getPose2d().getRotation().getRadians(), 0.02)
 						* maxRotationalVelocity * .3).withRotationalDeadband(0);
 
 			} else {
 				LedSubsystem.setNoteTracking(false);
 			}
 		} else if (RobotContainer.driverButtonX.getAsBoolean()) {
-			var target = RobotContainer.visionSubsystem.getBestFrontNote();
+			var target = VisionSubsystem.getBestFrontNote();
 			if (target != null & !IntakeSubsystem.getBackSensor() & !IntakeSubsystem.getFrontSensor()
 					& !IntakeSubsystem.getChamberSensor() & !ShooterSubsystem.getShooterSensor()) {
 				LedSubsystem.setNoteTracking(true);
@@ -129,13 +133,13 @@ public class DriveCommand extends Command {
 				double noteTrackSpeedMultiplier = 0.3;
 				var angleToTarget = -target.getYaw() * Math.PI / 180;
 				rotationController.setSetpoint(
-						RobotContainer.drivetrainSubsystem.getPose2d().getRotation().getRadians() + angleToTarget);
+						RobotContainer.driveSubsystem.getPose2d().getRotation().getRadians() + angleToTarget);
 				request = driveRobotCentric.withVelocityX(maxVelocity * noteTrackSpeedMultiplier).withVelocityY(0);
 				driveRobotCentric.withRotationalRate(rotationController
-						.calculate(RobotContainer.drivetrainSubsystem.getPose2d().getRotation().getRadians(), 0.02)
+						.calculate(RobotContainer.driveSubsystem.getPose2d().getRotation().getRadians(), 0.02)
 						* maxRotationalVelocity * .3).withRotationalDeadband(0);
 				driveFieldCentric.withRotationalRate(rotationController
-						.calculate(RobotContainer.drivetrainSubsystem.getPose2d().getRotation().getRadians(), 0.02)
+						.calculate(RobotContainer.driveSubsystem.getPose2d().getRotation().getRadians(), 0.02)
 						* maxRotationalVelocity * .3).withRotationalDeadband(0);
 
 			} else {
@@ -144,7 +148,7 @@ public class DriveCommand extends Command {
 		} else {
 			LedSubsystem.setNoteTracking(false);
 		}
-		RobotContainer.drivetrainSubsystem.applyRequest(request);
+		DriveSubsystem.applyRequest(request);
 	}
 
 	// Called once the command ends or is interrupted.

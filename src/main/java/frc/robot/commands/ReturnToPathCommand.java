@@ -5,7 +5,7 @@ package frc.robot.commands;
 // the WPILib BSD license file in the root directory of this project.
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.DriveSubsystem;
 
 import org.frcteam3539.Byte_Swerve_Lib.control.SimplePathBuilder;
 import org.frcteam3539.Byte_Swerve_Lib.control.Trajectory;
@@ -13,9 +13,9 @@ import org.frcteam3539.Byte_Swerve_Lib.control.Trajectory.State;
 
 public class ReturnToPathCommand extends Command {
 
-	private final CommandSwerveDrivetrain drivetrain;
+	private final DriveSubsystem drivetrain;
 	private final Trajectory trajectory;
-	public ReturnToPathCommand(CommandSwerveDrivetrain drivetrain, Trajectory trajectory) {
+	public ReturnToPathCommand(DriveSubsystem drivetrain, Trajectory trajectory) {
 		this.drivetrain = drivetrain;
 		this.trajectory = trajectory;
 
@@ -30,7 +30,7 @@ public class ReturnToPathCommand extends Command {
 				new SimplePathBuilder(drivetrain.getPose2d()).lineTo(s.getPathState().getPose2d()).build(),
 				trajectory.getConstraints(), 0.02, 0, trajectory.getTrajectoryStartingVelocity());
 
-		drivetrain.getFollower().follow(t);
+		DriveSubsystem.getFollower().follow(t);
 	}
 
 	@Override

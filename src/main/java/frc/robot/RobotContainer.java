@@ -41,7 +41,7 @@ public class RobotContainer {
 
 	public static TunerConstants tunerConstants = new TunerConstants();
 
-	public static CommandSwerveDrivetrain drivetrainSubsystem = TunerConstantsComp.DriveTrain; // TunerConstants.DriveTrain
+	public static DriveSubsystem driveSubsystem = TunerConstantsComp.DriveTrain; // TunerConstants.DriveTrain
 	public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
 	public static ClimberSubsystem climberSubsystem = new ClimberSubsystem();
@@ -155,7 +155,7 @@ public class RobotContainer {
 		driverController.y().whileTrue(new AutoAlignCommand(TagPosition.AMP));
 		driverController.povUp().whileTrue(new IntakeCommand(false, IntakeMode.BACK));
 
-		drivetrainSubsystem.setDefaultCommand(new DriveCommand());
+		driveSubsystem.setDefaultCommand(new DriveCommand());
 	}
 
 	public void putCommands() {

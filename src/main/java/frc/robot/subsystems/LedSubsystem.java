@@ -16,7 +16,6 @@ import com.ctre.phoenix.led.StrobeAnimation;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.constants.IDConstants;
 import frc.robot.constants.LedConstants;
 
@@ -148,18 +147,17 @@ public class LedSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		if (DriverStation.isAutonomous() && !RobotContainer.visionSubsystem.backLeftCam.isConnected()
-				&& !RobotContainer.visionSubsystem.backRightCam.isConnected()) {
+		if (DriverStation.isAutonomous() && !VisionSubsystem.backLeftCam.isConnected()
+				&& !VisionSubsystem.backRightCam.isConnected()) {
 			setLEDs(LEDState.ERROR);
 			return;
 		}
-		if (autoShooting && !RobotContainer.visionSubsystem.backLeftCam.isConnected()
-				&& !RobotContainer.visionSubsystem.backRightCam.isConnected()) {
+		if (autoShooting && !VisionSubsystem.backLeftCam.isConnected() && !VisionSubsystem.backRightCam.isConnected()) {
 			setLEDs(LEDState.ERROR);
 			return;
 		}
-		if (shootAligning && !RobotContainer.visionSubsystem.backLeftCam.isConnected()
-				&& !RobotContainer.visionSubsystem.backRightCam.isConnected()) {
+		if (shootAligning && !VisionSubsystem.backLeftCam.isConnected()
+				&& !VisionSubsystem.backRightCam.isConnected()) {
 			setLEDs(LEDState.ERROR);
 			return;
 		}
@@ -181,8 +179,7 @@ public class LedSubsystem extends SubsystemBase {
 			return;
 		}
 		if (noteTracking) {
-			if (!RobotContainer.visionSubsystem.backNoteCam.isConnected()
-					|| !RobotContainer.visionSubsystem.frontNoteCam.isConnected()) {
+			if (!VisionSubsystem.backNoteCam.isConnected() || !VisionSubsystem.frontNoteCam.isConnected()) {
 				setLEDs(LEDState.ERROR);
 				return;
 			}
