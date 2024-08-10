@@ -25,7 +25,7 @@ public class Blue4Piece extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/Blue4Piece.txt", false);
 
 	private Command[] sequence = {
-			new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+			new InstantCommand(() -> RobotContainer.driveSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
 
 			new ParallelCommandGroup(new RevUpCommand(false, ShooterConstants.shootDps).withTimeout(15),
 
@@ -42,7 +42,7 @@ public class Blue4Piece extends SequentialCommandGroup {
 							new IntakeCommand(true, IntakeMode.FRONT).withTimeout(3)),
 
 					new SequentialCommandGroup(new WaitCommand(1), new FollowTrajectoryCommand(
-							RobotContainer.drivetrainSubsystem, loader.getNextTrajectory())))};
+							RobotContainer.driveSubsystem, loader.getNextTrajectory())))};
 
 	/** Creates a new RedShootDrive. */
 	public Blue4Piece() {

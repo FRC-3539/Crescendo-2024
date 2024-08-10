@@ -23,10 +23,10 @@ public class RedShootDrive extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/RedShootDrive.txt", false);
 
 	private Command[] sequence = {
-			new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+			new InstantCommand(() -> RobotContainer.driveSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
 			new ParallelCommandGroup(new RevUpCommand(true, ShooterConstants.shootDps).withTimeout(2),
 					new SequentialCommandGroup(new WaitCommand(1), new ShootCommand().withTimeout(1),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem,
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem,
 									loader.getNextTrajectory())))};
 
 	/** Creates a new RedShootDrive. */

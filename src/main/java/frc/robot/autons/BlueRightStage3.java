@@ -27,7 +27,7 @@ public class BlueRightStage3 extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/BlueRightStage3.txt", false);
 
 	private Command[] sequence = {
-			new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+			new InstantCommand(() -> RobotContainer.driveSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
 			new ParallelCommandGroup(new RevUpCommand(false, ShooterConstants.shootDps).withTimeout(15),
 
 					new SequentialCommandGroup(new WaitCommand(0.4), new ShootCommand().withTimeout(1)),
@@ -45,9 +45,9 @@ public class BlueRightStage3 extends SequentialCommandGroup {
 							new IntakeCommand(true, IntakeMode.FRONT).withTimeout(4)),
 
 					new SequentialCommandGroup(new WaitCommand(0.2),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem,
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem,
 									loader.getNextTrajectory())))};
 	/** Creates a new RedShootDrive. */
 	public BlueRightStage3() {

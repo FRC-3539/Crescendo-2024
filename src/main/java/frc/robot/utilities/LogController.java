@@ -67,7 +67,7 @@ public class LogController {
 	public void logDriveSubsystem() {
 		if (!LOG_DRIVE_SUBSYSTEM)
 			return;
-		RobotContainer.drivetrainSubsystem.log();
+		RobotContainer.driveSubsystem.log();
 	}
 
 	public void logIntakeSubsystem() {

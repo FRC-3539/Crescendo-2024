@@ -26,7 +26,7 @@ public class BlueCL4Piece extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/BlueCL4Piece.txt", false);
 
 	private Command[] sequence = {
-			new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+			new InstantCommand(() -> RobotContainer.driveSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
 			new ParallelCommandGroup(new RevUpCommand(false, ShooterConstants.shootDps).withTimeout(15),
 
 					new SequentialCommandGroup(new WaitCommand(0.4), new AutoShootCommand().withTimeout(1.5)),
@@ -49,11 +49,11 @@ public class BlueCL4Piece extends SequentialCommandGroup {
 							new IntakeCommand(true, IntakeMode.FRONT).withTimeout(4)),
 
 					new SequentialCommandGroup(
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem,
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem,
 									loader.getNextTrajectory())))};
 	/** Creates a new RedShootDrive. */
 	public BlueCL4Piece() {

@@ -16,7 +16,7 @@ public class ZeroGyroCommand extends Command {
 	// Called when the command is initially scheduled.
 	@Override
 	public void initialize() {
-		RobotContainer.drivetrainSubsystem.seedFieldRelative();
+		RobotContainer.driveSubsystem.seedFieldRelative();
 	}
 
 	// Called every time the scheduler runs while the command is scheduled.

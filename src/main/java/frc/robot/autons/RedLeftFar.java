@@ -25,7 +25,7 @@ public class RedLeftFar extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/RedLeftFar.txt", false);
 
 	private Command[] sequence = {
-			new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+			new InstantCommand(() -> RobotContainer.driveSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
 			new ParallelCommandGroup(new RevUpCommand(false, ShooterConstants.shootDps).withTimeout(15),
 
 					new SequentialCommandGroup(new WaitCommand(1), new ShootCommand().withTimeout(1)),
@@ -34,7 +34,7 @@ public class RedLeftFar extends SequentialCommandGroup {
 					new SequentialCommandGroup(new WaitCommand(8),
 							new IntakeCommand(true, IntakeMode.FRONT).withTimeout(4)),
 					new SequentialCommandGroup(new WaitCommand(3), new FollowTrajectoryCommand(
-							RobotContainer.drivetrainSubsystem, loader.getNextTrajectory())))};
+							RobotContainer.driveSubsystem, loader.getNextTrajectory())))};
 	/** Creates a new RedShootDrive. */
 	public RedLeftFar() {
 		addCommands(sequence);

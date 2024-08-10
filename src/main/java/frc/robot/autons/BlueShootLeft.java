@@ -27,7 +27,7 @@ public class BlueShootLeft extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/BlueShootLeft.txt", false);
 
 	private Command[] sequence = {
-			new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+			new InstantCommand(() -> RobotContainer.driveSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
 
 			new ParallelCommandGroup(new RevUpCommand(false, ShooterConstants.shootDps).withTimeout(10),
 
@@ -40,9 +40,9 @@ public class BlueShootLeft extends SequentialCommandGroup {
 							new IntakeCommand(true, IntakeMode.FRONT).withTimeout(2.5)),
 
 					new SequentialCommandGroup(new WaitCommand(1),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()),
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
 							new WaitCommand(4),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory())
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory())
 
 					))};
 

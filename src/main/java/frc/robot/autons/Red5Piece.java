@@ -26,7 +26,7 @@ public class Red5Piece extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/Red5Piece.txt", false);
 
 	private Command[] sequence = {
-			new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+			new InstantCommand(() -> RobotContainer.driveSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
 
 			new ParallelCommandGroup(new RevUpCommand(false, ShooterConstants.shootDps).withTimeout(15),
 
@@ -47,8 +47,8 @@ public class Red5Piece extends SequentialCommandGroup {
 							new IntakeCommand(true, IntakeMode.FRONT).withTimeout(5.0)),
 
 					new SequentialCommandGroup(new WaitCommand(.5),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem,
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem,
 									loader.getNextTrajectory())))};
 
 	/** Creates a new RedShootDrive. */

@@ -23,11 +23,11 @@ public class BlueSimpleLeft extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/BlueSimpleLeft.txt", false);
 
 	private Command[] sequence = {
-			new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+			new InstantCommand(() -> RobotContainer.driveSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
 			new ParallelCommandGroup(new RevUpCommand(false, ShooterConstants.shootDps).withTimeout(2.5),
 					new SequentialCommandGroup(new WaitCommand(1), new ShootCommand().withTimeout(1)),
 					new SequentialCommandGroup(new WaitCommand(12), new FollowTrajectoryCommand(
-							RobotContainer.drivetrainSubsystem, loader.getNextTrajectory())))};
+							RobotContainer.driveSubsystem, loader.getNextTrajectory())))};
 
 	/** Creates a new RedShootDrive. */
 	public BlueSimpleLeft() {

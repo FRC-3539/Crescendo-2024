@@ -29,7 +29,7 @@ public class Red5NoteTracking extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/Red5NoteTracking.txt", false);
 
 	private Command[] sequence = {
-			new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+			new InstantCommand(() -> RobotContainer.driveSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
 
 			new ParallelCommandGroup(new RevUpCommand(false, ShooterConstants.shootDps).withTimeout(15),
 
@@ -47,16 +47,16 @@ public class Red5NoteTracking extends SequentialCommandGroup {
 					
 
 					new SequentialCommandGroup(new WaitCommand(.5),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem,loader.getNextTrajectory()),
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
+							new FollowTrajectoryCommand(RobotContainer.driveSubsystem,loader.getNextTrajectory()),
 							
 							new ParallelDeadlineGroup(
 								new SequentialCommandGroup(
 									new AutonNoteTrackCommand().withTimeout(1),
-									new ReturnToPathCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()),
+									new ReturnToPathCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
 									new ParallelCommandGroup(
 								 	new WaitCommand(1).andThen(new AngleShooterCommand(-28.5)),
-									new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getCurrentTrajectory()))
+									new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getCurrentTrajectory()))
 									
 								),
 								new IntakeCommand(true, IntakeMode.FRONT)

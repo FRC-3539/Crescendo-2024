@@ -29,7 +29,7 @@ public class Blue6Piece extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/Blue6Piece.txt", false);
 
 	private Command[] sequence = {
-		new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+		new InstantCommand(() -> RobotContainer.driveSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
 		new ParallelCommandGroup(
 			new RevUpCommand(false, ShooterConstants.shootDps).withTimeout(15),
 			new SequentialCommandGroup(
@@ -38,16 +38,16 @@ public class Blue6Piece extends SequentialCommandGroup {
 					new WaitCommand(0.4)
 						.andThen(new ShootCommand().withTimeout(1)),
 		
-						new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory())
-						.andThen(new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()))
+						new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory())
+						.andThen(new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()))
 						.andThen(new AutonNoteTrackCommand().withTimeout(1))
-						.andThen(new ReturnToPathCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory())),
+						.andThen(new ReturnToPathCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory())),
 					new WaitCommand(2.67)
 						.andThen(new IntakeCommand(true, IntakeMode.FRONT).withTimeout(4))
 				),
 				// Return and shoot second note
 				new ParallelCommandGroup(
-					new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getCurrentTrajectory()),
+					new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getCurrentTrajectory()),
 					new WaitCommand(1.45)
 						.andThen(new AngleShooterCommand(-25.5)),
 					new WaitCommand(1.70)
@@ -56,15 +56,15 @@ public class Blue6Piece extends SequentialCommandGroup {
 				),
 				// Go pick up third note
 				new ParallelCommandGroup(
-					new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory())
+					new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory())
 						.andThen(new AutonNoteTrackCommand().withTimeout(1))
-						.andThen(new ReturnToPathCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory())),
+						.andThen(new ReturnToPathCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory())),
 					new WaitCommand(1.57)
 						.andThen(new IntakeCommand(true, IntakeMode.FRONT).withTimeout(5))
 				),
 				// Return and shoot third note
 				new ParallelCommandGroup(
-					new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getCurrentTrajectory()),
+					new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getCurrentTrajectory()),
 					new WaitCommand(1.28)
 					.andThen(new AngleShooterCommand(-23)),
 					new WaitCommand(1.57)
@@ -74,7 +74,7 @@ public class Blue6Piece extends SequentialCommandGroup {
 				),
 				// Go pick up fourth note
 				new ParallelCommandGroup(
-					new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory())
+					new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory())
 						.andThen(new AutonNoteTrackCommand().withTimeout(1)),
 					(new IntakeCommand(true, IntakeMode.FRONT).withTimeout(5))
 				),
@@ -85,13 +85,13 @@ public class Blue6Piece extends SequentialCommandGroup {
 				),
 				//pick up fifth note 
 				new ParallelCommandGroup(
-					new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory())
+					new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory())
 						.andThen(new AutonNoteTrackCommand().withTimeout(1)),
 					(new IntakeCommand(true, IntakeMode.FRONT).withTimeout(4))
 				),
 				//shoot fifth note and pick up sixth
 				new ParallelCommandGroup(
-					new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem, loader.getNextTrajectory()),
+					new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
 					new WaitCommand(0.75)
 					.andThen(new ShootCommand().withTimeout(1)),
 					new WaitCommand(1.27).andThen(new IntakeCommand(true, IntakeMode.FRONT).withTimeout(5))
