@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autons.*;
@@ -163,6 +164,9 @@ public class RobotContainer {
 		SmartDashboard.putData(new DisableElevatorBreakModeCommand().ignoringDisable(true));
 		SmartDashboard.putData(new DisableClimberBreakModeCommand().ignoringDisable(true));
 
+		// SmartDashboard.putData(new
+		// InstantCommand(gtsamRunner::sendTagLayout).withName("Send tag layout"));
+		SmartDashboard.putData(new InstantCommand(visionSubsystem::sendInitialGuess).withName("Reset tag layout"));
 	}
 
 	/**
