@@ -1,7 +1,5 @@
 package frc.robot.utilities;
 
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotContainer;
 
 public class LogController {
@@ -52,7 +50,7 @@ public class LogController {
 		// metadata values may
 		// be added.
 
-		DriverStation.startDataLog(DataLogManager.getLog());
+		// DriverStation.startDataLog(DataLogManager.getLog());
 	}
 
 	public void logPeriodic() {

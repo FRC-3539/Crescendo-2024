@@ -4,10 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.HomePositionCommand;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.vision.photonvision.gtsam.GtsamInterface;
+import java.util.List;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,6 +25,8 @@ public class Robot extends TimedRobot {
 
 	public RobotContainer robotContainer;
 
+	public GtsamInterface iface;
+
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any initialization code.
@@ -31,6 +37,8 @@ public class Robot extends TimedRobot {
 		// and put our
 		// autonomous chooser on the dashboard.
 		robotContainer = new RobotContainer();
+		this.iface = new GtsamInterface(List.of("BackLeft", "BackRight"));
+
 	}
 
 	/**
@@ -53,6 +61,13 @@ public class Robot extends TimedRobot {
 		// robot's periodic
 		// block in order for anything in the Command-based framework to work.
 		CommandScheduler.getInstance().run();
+		iface.setCamIntrinsics("BackLeft", VisionSubsystem.backLeftCam.getCameraMatrix(),
+				VisionSubsystem.backLeftCam.getDistCoeffs());
+		iface.setCamIntrinsics("BackRight", VisionSubsystem.backRightCam.getCameraMatrix(),
+				VisionSubsystem.backRightCam.getDistCoeffs());
+		iface.sendRTCam("BackLeft", RobotController.getFPGATime(), VisionSubsystem.robotToBackLeftCam);
+		iface.sendRTCam("BackRight", RobotController.getFPGATime(), VisionSubsystem.robotToBackLeftCam);
+
 	}
 
 	/** This function is called once each time the robot enters Disabled mode. */
@@ -64,6 +79,8 @@ public class Robot extends TimedRobot {
 	public void disabledPeriodic() {
 		RobotContainer.shooterSubsystem.initializeArmAngle();
 		RobotContainer.shooterSubsystem.initializeElevatorPosition();
+		RobotContainer.drivetrainSubsystem.sendInitialGuess();
+
 	}
 
 	/**

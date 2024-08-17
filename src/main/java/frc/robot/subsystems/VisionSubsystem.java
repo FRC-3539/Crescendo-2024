@@ -31,16 +31,18 @@ public class VisionSubsystem extends Thread {
 	AprilTagFieldLayout aprilTagFieldLayout;
 	public GtsamInterface iface;
 
-	public PhotonCamera backLeftCam;
+	public boolean sentInitial = false;
+
+	public static PhotonCamera backLeftCam;
 	public static Transform3d robotToBackLeftCam = new Transform3d(new Translation3d(-0.3302, 0.2286, 0.53975),
 			new Rotation3d(Math.toRadians(0), Math.toRadians(-16.5), Math.toRadians(180)));
 
-	public PhotonCamera backRightCam;
+	public static PhotonCamera backRightCam;
 	public static Transform3d robotToBackRightCam = new Transform3d(new Translation3d(-0.3302, -0.2286, 0.53975),
 			new Rotation3d(Math.toRadians(0), Math.toRadians(-16.3), Math.toRadians(180)));
 
-	public PhotonCamera frontNoteCam;
-	public PhotonCamera backNoteCam;
+	public static PhotonCamera frontNoteCam;
+	public static PhotonCamera backNoteCam;
 
 	PhotonPoseEstimator backLeftPhotonPoseEstimator;
 	PhotonPoseEstimator backRightPhotonPoseEstimator;
@@ -122,16 +124,18 @@ public class VisionSubsystem extends Thread {
 	public void sendInitialGuess() {
 		var val = getEstimatedBackLeftGlobalPose();
 		var val2 = getEstimatedBackRightGlobalPose();
+
+		long time = RobotController.getFPGATime();
 		if (val.isPresent()) {
-			iface.sendGuess(RobotController.getFPGATime(), val.get().estimatedPose);
+			iface.sendGuess(time, val.get().estimatedPose);
 		} else if (val2.isPresent()) {
-			iface.sendGuess(RobotController.getFPGATime(), val2.get().estimatedPose);
+			iface.sendGuess(time, val2.get().estimatedPose);
 		} else {
 			DriverStation.reportWarning("Sending Empty Pose3d", false);
-			iface.sendGuess(RobotController.getFPGATime(), new Pose3d());
+			iface.sendGuess(time, new Pose3d());
 		}
-		iface.setCamIntrinsics("BackLeft", backLeftCam.getCameraMatrix(), backLeftCam.getDistCoeffs());
-		iface.setCamIntrinsics("BackRight", backRightCam.getCameraMatrix(), backRightCam.getDistCoeffs());
+		sentInitial = true;
+
 	}
 	@Override
 	public void run() {
@@ -168,8 +172,15 @@ public class VisionSubsystem extends Thread {
 					tags.add(new TagDetection(result.getFiducialId(), result.getDetectedCorners()));
 				}
 
-				iface.sendVisionUpdate("BackLeft", (long) (newLeft.getTimestampSeconds() * 1e6), tags,
-						VisionSubsystem.robotToBackLeftCam);
+				SmartDashboard.putNumber("BackleftTime", (long) (newLeft.getTimestampSeconds() * 1e6));
+
+				if (sentInitial
+						&& newLeft.getTimestampSeconds() * 1e6 < RobotContainer.drivetrainSubsystem.lastOdomUpdate) {
+					// iface.sendVisionUpdate("BackLeft", (long) (newLeft.getTimestampSeconds() *
+					// 1e6), tags,
+					// VisionSubsystem.robotToBackLeftCam);
+					System.out.println("SentLeft " + newLeft.getTimestampSeconds() * 1e6);
+				}
 			}
 
 			if (newRight.getTimestampSeconds() != lastBackRightResult.getTimestampSeconds()) {
@@ -179,9 +190,15 @@ public class VisionSubsystem extends Thread {
 				for (var result : newRight.getTargets()) {
 					tags.add(new TagDetection(result.getFiducialId(), result.getDetectedCorners()));
 				}
+				SmartDashboard.putNumber("BackRightTime", RobotController.getFPGATime());
 
-				iface.sendVisionUpdate("BackRight", (long) (newRight.getTimestampSeconds() * 1e6), tags,
-						VisionSubsystem.robotToBackRightCam);
+				if (sentInitial
+						&& newRight.getTimestampSeconds() * 1e6 < RobotContainer.drivetrainSubsystem.lastOdomUpdate) {
+					iface.sendVisionUpdate("BackRight", RobotController.getFPGATime(), tags,
+							VisionSubsystem.robotToBackRightCam);
+					System.out.println("SentRight " + newRight.getTimestampSeconds() * 1e6);
+
+				}
 			}
 		}
 	}

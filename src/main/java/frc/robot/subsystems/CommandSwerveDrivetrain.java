@@ -12,11 +12,18 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import java.util.List;
+import java.util.ArrayList;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.geometry.Twist3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
@@ -33,6 +40,7 @@ import frc.robot.RobotContainer;
 import frc.robot.constants.DrivetrainConstants;
 import frc.robot.constants.IDConstants;
 import frc.robot.vision.photonvision.gtsam.GtsamInterface;
+import frc.robot.vision.photonvision.gtsam.TagDetection;
 
 import java.util.Arrays;
 import org.frcteam3539.Byte_Swerve_Lib.control.HolonomicMotionProfiledTrajectoryFollower;
@@ -40,10 +48,36 @@ import org.frcteam3539.Byte_Swerve_Lib.control.PidConstants;
 import org.frcteam3539.Byte_Swerve_Lib.control.Trajectory;
 import org.frcteam3539.Byte_Swerve_Lib.util.DrivetrainFeedforwardConstants;
 import org.frcteam3539.Byte_Swerve_Lib.util.HolonomicFeedforward;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
 	/** Creates a new DrivetrainSubsystem. */
 	private final HolonomicMotionProfiledTrajectoryFollower follower;
+
+	// Vision Variables
+	AprilTagFieldLayout aprilTagFieldLayout;
+
+	public boolean sentInitial = false;
+
+	public static PhotonCamera backLeftCam;
+	public static Transform3d robotToBackLeftCam = new Transform3d(new Translation3d(-0.3302, 0.2286, 0.53975),
+			new Rotation3d(Math.toRadians(0), Math.toRadians(-16.5), Math.toRadians(180)));
+
+	public static PhotonCamera backRightCam;
+	public static Transform3d robotToBackRightCam = new Transform3d(new Translation3d(-0.3302, -0.2286, 0.53975),
+			new Rotation3d(Math.toRadians(0), Math.toRadians(-16.3), Math.toRadians(180)));
+
+	public static PhotonCamera frontNoteCam;
+	public static PhotonCamera backNoteCam;
+
+	PhotonPoseEstimator backLeftPhotonPoseEstimator;
+	PhotonPoseEstimator backRightPhotonPoseEstimator;
+
+	PhotonPipelineResult lastBackLeftResult = new PhotonPipelineResult();
+	PhotonPipelineResult lastBackRightResult = new PhotonPipelineResult();
 
 	public GtsamInterface iface;
 
@@ -55,10 +89,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 	public double velocityX = 0.0;
 	public double velocityY = 0.0;
 
+	public long lastOdomUpdate = 0;
+
 	public double maxVelocity = 0.0;
 	public double maxRotationalVelocity = 0.0;
 
 	public Pigeon2 pigeon = new Pigeon2(IDConstants.PigeonID, "canivore");
+
+	Alliance lastAlliance;
+
+	long sentTime = 0;
 
 	public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
 		super(driveTrainConstants, modules);
@@ -93,6 +133,35 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
 		// this.registerTelemetry(this::updateGtSam);
 
+		try {
+			aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
+
+		} catch (Exception e) {
+			System.out.println("ERROR Loading April Tag DATA");
+			aprilTagFieldLayout = null;
+		}
+
+		backLeftCam = new PhotonCamera("BackLeft");
+		backLeftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+				PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backLeftCam, robotToBackLeftCam);
+
+		backRightCam = new PhotonCamera("BackRight");
+		backRightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+				PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backRightCam, robotToBackRightCam);
+
+		frontNoteCam = new PhotonCamera("FrontNoteCam");
+		backNoteCam = new PhotonCamera("BackNoteCam");
+
+		backLeftCam.setVersionCheckEnabled(false);
+		backRightCam.setVersionCheckEnabled(false);
+		backNoteCam.setVersionCheckEnabled(false);
+		frontNoteCam.setVersionCheckEnabled(false);
+
+		sendTagLayout();
+
+	}
+	public void sendTagLayout() {
+		iface.sendLayout(aprilTagFieldLayout);
 	}
 
 	public HolonomicMotionProfiledTrajectoryFollower getFollower() {
@@ -101,6 +170,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
 	public void seedFieldRelative(Trajectory trajectory) {
 		this.seedFieldRelative(trajectory.calculate(0).getPathState().getPose2d());
+		SmartDashboard.putNumber("MEEEE", WPIUtilJNI.now());
 		this.iface.sendGuess(WPIUtilJNI.now(), new Pose3d(trajectory.calculate(0).getPathState().getPose2d()));
 	}
 
@@ -163,27 +233,28 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 	}
 	SwerveModulePosition[] m_last_modulePositions;
 	int test = 0;
+
+	public void sendInitialGuess() {
+
+		long time = RobotController.getFPGATime();
+
+		DriverStation.reportWarning("Sending Empty Pose3d", false);
+		iface.sendGuess(time, new Pose3d(new Translation3d(3, 2, 0), new Rotation3d()));
+
+		sentInitial = true;
+
+		sentTime = time;
+
+	}
 	@Override
 	public void periodic() {
 		var now = RobotController.getFPGATime();
+		lastOdomUpdate = now;
+		SmartDashboard.putNumber("FPGA Time", now);
 		if (m_last_modulePositions == null) {
-			System.out.println("init");
 			this.m_last_modulePositions = new SwerveModulePosition[m_modulePositions.length];
 			for (int i = 0; i < m_modulePositions.length; i++) {
 				this.m_last_modulePositions[i] = m_modulePositions[i].copy();
-			}
-		}
-		// System.out.println("Periodic");
-		test++;
-		if (test % 100 == 0) {
-			System.out.println("last mod pos:");
-
-			for (SwerveModulePosition pos : m_last_modulePositions) {
-				System.out.println(pos.toString());
-			}
-			System.out.println("current mod pos:");
-			for (SwerveModulePosition pos : m_modulePositions) {
-				System.out.println(pos.toString());
 			}
 		}
 
@@ -227,6 +298,31 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 		this.setControl(request);
 		// This method will be called once per scheduler run
 		SmartDashboard.putNumber("/DriveTrain/BatteryVoltage", RobotController.getBatteryVoltage());
+
+		if (DriverStation.getAlliance().isPresent()) {
+			if (DriverStation.getAlliance().get() == Alliance.Blue && lastAlliance != Alliance.Blue) {
+				lastAlliance = Alliance.Blue;
+				aprilTagFieldLayout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
+			}
+			if (DriverStation.getAlliance().get() == Alliance.Red && lastAlliance != Alliance.Red) {
+
+				lastAlliance = Alliance.Red;
+				aprilTagFieldLayout.setOrigin(OriginPosition.kRedAllianceWallRightSide);
+			}
+		}
+
+		backRightPhotonPoseEstimator.setFieldTags(aprilTagFieldLayout);
+
+		var newRight = backRightCam.getLatestResult();
+
+		var tags = new ArrayList<TagDetection>();
+		for (var result : newRight.getTargets()) {
+			tags.add(new TagDetection(result.getFiducialId(), result.getDetectedCorners()));
+		}
+		if (sentInitial && sentTime < now - 3000000) {
+			iface.sendVisionUpdate("BackRight", now - 1, tags, VisionSubsystem.robotToBackRightCam);
+
+		}
 
 	}
 }

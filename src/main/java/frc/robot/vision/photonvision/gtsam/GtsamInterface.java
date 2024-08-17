@@ -217,6 +217,15 @@ public class GtsamInterface {
 	 *            latency compensated yet, so maybe don't put your camera on a
 	 *            turret
 	 */
+
+	public void sendRTCam(String camName, long tagDetTime, Transform3d robotTcam) {
+		var cam = cameras.get(camName);
+		if (cam == null) {
+			throw new RuntimeException("Camera " + camName + " not in map!");
+		}
+		cam.robotTcamPub.set(robotTcam, tagDetTime);
+	}
+
 	public void sendVisionUpdate(String camName, long tagDetTime, List<TagDetection> camDetectedTags,
 			Transform3d robotTcam) {
 
