@@ -320,7 +320,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 			tags.add(new TagDetection(result.getFiducialId(), result.getDetectedCorners()));
 		}
 		if (sentInitial && sentTime < now - 3000000) {
-			iface.sendVisionUpdate("BackRight", now - 1, tags, VisionSubsystem.robotToBackRightCam);
+			iface.sendVisionUpdate("BackRight", (long) (newRight.getTimestampSeconds() * 1000000), tags,
+					VisionSubsystem.robotToBackRightCam);
 
 		}
 
