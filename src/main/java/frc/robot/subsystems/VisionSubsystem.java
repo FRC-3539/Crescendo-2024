@@ -65,11 +65,11 @@ public class VisionSubsystem extends Thread {
 
 		backLeftCam = new PhotonCamera("BackLeft");
 		backLeftPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-				PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backLeftCam, robotToBackLeftCam);
+				PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToBackLeftCam);
 
 		backRightCam = new PhotonCamera("BackRight");
 		backRightPhotonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
-				PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backRightCam, robotToBackRightCam);
+				PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToBackRightCam);
 
 		frontNoteCam = new PhotonCamera("FrontNoteCam");
 		backNoteCam = new PhotonCamera("BackNoteCam");
@@ -80,11 +80,19 @@ public class VisionSubsystem extends Thread {
 	// Vision Methods
 
 	public Optional<EstimatedRobotPose> getEstimatedBackLeftGlobalPose() {
-		return backLeftPhotonPoseEstimator.update();
+		Optional<EstimatedRobotPose> visionEst = Optional.empty();
+		for (var change : backLeftCam.getAllUnreadResults()) {
+			visionEst = backLeftPhotonPoseEstimator.update(change);
+		}
+		return visionEst;
 	}
 
 	public Optional<EstimatedRobotPose> getEstimatedBackRightGlobalPose() {
-		return backRightPhotonPoseEstimator.update();
+		Optional<EstimatedRobotPose> visionEst = Optional.empty();
+		for (var change : backRightCam.getAllUnreadResults()) {
+			visionEst = backRightPhotonPoseEstimator.update(change);
+		}
+		return visionEst;
 	}
 
 	public void useVision(boolean useVision) {
@@ -129,12 +137,14 @@ public class VisionSubsystem extends Thread {
 		return weights;
 	}
 	public PhotonTrackedTarget getBestFrontNote() {
-		var result = frontNoteCam.getLatestResult();
+		var results = frontNoteCam.getAllUnreadResults();
+		var result = results.get(results.size() - 1);
 		var bestTarget = result.getBestTarget();
 		return bestTarget;
 	}
 	public PhotonTrackedTarget getBestBackNote() {
-		var result = backNoteCam.getLatestResult();
+		var results = backNoteCam.getAllUnreadResults();
+		var result = results.get(results.size() - 1);
 		var bestTarget = result.getBestTarget();
 		return bestTarget;
 	}
