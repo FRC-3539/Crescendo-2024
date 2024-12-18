@@ -37,6 +37,8 @@ public class Red5NoteTracking extends SequentialCommandGroup {
 					new SequentialCommandGroup(new WaitCommand(3.6), new ShootCommand().withTimeout(0.5)),
 					new SequentialCommandGroup(new WaitCommand(6.1), new ShootCommand().withTimeout(0.4)),
 					new SequentialCommandGroup(new WaitCommand(9), new ShootCommand().withTimeout(0.5)),
+					new SequentialCommandGroup(new WaitCommand(14.75), new ShootCommand().withTimeout(0.5)),
+
 					
 					new SequentialCommandGroup(new WaitCommand(0.85),
 							new IntakeCommand(true, IntakeMode.FRONT).withTimeout(2.0)),
@@ -55,13 +57,13 @@ public class Red5NoteTracking extends SequentialCommandGroup {
 									new AutonNoteTrackCommand().withTimeout(1),
 									new ReturnToPathCommand(RobotContainer.driveSubsystem, loader.getNextTrajectory()),
 									new ParallelCommandGroup(
-								 	new WaitCommand(1).andThen(new AngleShooterCommand(-28.5)),
-									new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getCurrentTrajectory()))
+								 		new WaitCommand(1).andThen(new AngleShooterCommand(-28.5)),
+										new FollowTrajectoryCommand(RobotContainer.driveSubsystem, loader.getCurrentTrajectory()))
 									
 								),
 								new IntakeCommand(true, IntakeMode.FRONT)
-							),
-							 new ShootCommand().withTimeout(1.0)
+							)
+		
 							)
 							)
 									};

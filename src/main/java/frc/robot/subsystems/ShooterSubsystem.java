@@ -159,6 +159,10 @@ public class ShooterSubsystem extends SubsystemBase {
 		}
 	}
 
+	public static double getTargetAngle(){
+		return requestedArmPos;
+	}
+
 	public static void setTopMotorSpeed(double rps) {
 		topMotor.setControl(velocityVoltageControlTop.withVelocity(rps));
 	}

@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
@@ -47,10 +48,14 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
 	public static double maxVelocity = 0.0;
 	public static double maxRotationalVelocity = 0.0;
 
+	public static boolean invertBackLeftDrive = false;//TODO: FIX ME!
+	public static boolean invertBackLeftDriveLast = false;
+
 	public static Pigeon2 pigeon = new Pigeon2(IDConstants.PigeonID, "canivore");
 
 	public DriveSubsystem(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
 		super(driveTrainConstants, modules);
+
 
 		maxVelocity = modules[0].SpeedAt12VoltsMps;
 
@@ -82,6 +87,7 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
 	public static HolonomicMotionProfiledTrajectoryFollower getFollower() {
 		return follower;
 	}
+
 
 	public void seedFieldRelative(Trajectory trajectory) {
 		seedFieldRelative(trajectory.calculate(0).getPathState().getPose2d());
@@ -174,5 +180,19 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
 		// This method will be called once per scheduler run
 		SmartDashboard.putNumber("/DriveTrain/BatteryVoltage", RobotController.getBatteryVoltage());
 
+		if(invertBackLeftDrive!=invertBackLeftDriveLast)
+		{
+			System.out.println("INVERT CALLED");
+			Modules[2].getDriveMotor().setInverted(invertBackLeftDrive);
+			invertBackLeftDriveLast = invertBackLeftDrive;
+		}
+
+
 	}
+	public static void invertBackLeftDrive()
+	{
+		System.out.println("Set Invert");
+		invertBackLeftDrive = !invertBackLeftDrive;
+	}
+
 }

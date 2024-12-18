@@ -52,11 +52,7 @@ public class AutoShootCommand extends Command {
 		double angleToTarget = ShooterSubsystem.getEstimatedShooterAngle();
 		ShooterSubsystem.setShooterAngle(angleToTarget);
 		if (!RobotContainer.rightOperatorBumper.getAsBoolean()) {
-			if (angleToTarget > -50) {
-				IntakeSubsystem.setChamberMotorSpeed(IntakeConstants.intakeDps / 30);
-			} else {
-				IntakeSubsystem.setChamberMotorVoltage(0);
-			}
+			
 		}
 
 	}

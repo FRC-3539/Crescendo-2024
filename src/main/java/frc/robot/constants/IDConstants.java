@@ -42,4 +42,4 @@ public class IDConstants extends BBConstants {
 	public static int chamberSensorChannel = 1;
 	public static int leftServoChannel = 1;
 	public static int rightServoChannel = 0;
-}
+}

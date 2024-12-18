@@ -51,7 +51,7 @@ public class Blue3NoteTracking extends SequentialCommandGroup {
 					new FollowTrajectoryCommand(RobotContainer.driveSubsystem, trajectories[1]).andThen(new WaitCommand(0.3)).andThen(new ShootCommand().withTimeout(.5))
 						.andThen(new HomePositionCommand()),
 					new WaitCommand(.5)
-						.andThen(new AngleShooterCommand(-25))
+						.andThen(new AngleShooterCommand(-26))
 						
 				),
 				// Go pick up third note
@@ -65,7 +65,7 @@ public class Blue3NoteTracking extends SequentialCommandGroup {
 				// Return and shoot third note
 				new ParallelCommandGroup(
 					new FollowTrajectoryCommand(RobotContainer.driveSubsystem, trajectories[3]).andThen(new WaitCommand(0.1)).andThen(new ShootCommand().withTimeout(1)),
-					new WaitCommand(0.5).andThen(new AngleShooterCommand(-24.5))
+					new WaitCommand(0.5).andThen(new AngleShooterCommand(-25.5))
 				)
 			)
 		)

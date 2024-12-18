@@ -30,7 +30,7 @@ public class IntakeSubsystem extends SubsystemBase {
 		groundMotor = new TalonFX(IDConstants.groundMotorID, "rio");
 		groundMotor.getConfigurator().apply(new TalonFXConfiguration());
 		groundMotor.setInverted(true);
-		groundMotor.setNeutralMode(NeutralModeValue.Coast);
+		groundMotor.setNeutralMode(NeutralModeValue.Brake);
 		kickMotor = new TalonFX(IDConstants.kickMotorID, "rio");
 		kickMotor.getConfigurator().apply(new TalonFXConfiguration());
 		kickMotor.setInverted(true);
@@ -134,10 +134,18 @@ public class IntakeSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("/Intake/GroundRPS", getGroundMotorSpeed());
 		SmartDashboard.putNumber("/Intake/KickRPS", getKickMotorSpeed());
 		SmartDashboard.putNumber("/Intake/ChamberRPS", getChamberMotorSpeed());
+		
 	}
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		if(ShooterSubsystem.getFeedMotorSpeed() < 1){
+		if (ShooterSubsystem.getTargetAngle()> -54) {
+			IntakeSubsystem.setChamberMotorSpeed(IntakeConstants.intakeDps / 30);
+		} else {
+			IntakeSubsystem.setChamberMotorVoltage(0);
+		}
+	}
 	}
 }

@@ -1,11 +1,11 @@
 {
   "name": "Blue5Piece",
-  "edited": "07/19/24, 06:50:50 PM",
+  "edited": "09/22/24, 05:08:03 PM",
   "isRed": false,
   "paths": [
     {
       "name": "Path 1",
-      "id": "afca6abb-aca0-49f4-8d0b-1a55481956ce",
+      "id": "a219fc31-0945-432a-8175-589d416d493d",
       "isSpline": true,
       "maxVelocity": 3.0,
       "inVelocity": 0.0,
@@ -18,55 +18,55 @@
           "x": 1.302,
           "y": 5.544,
           "rotation": 0.0,
-          "id": "ae2782c2-fc5d-4924-80a1-2958b701d5f9"
+          "id": "b2ea372d-09c5-4030-b1ff-a18cee5fe1e4"
         },
         {
           "x": 3.146,
           "y": 5.428,
           "rotation": 0.0,
-          "id": "d028f781-efae-4ccb-8dfd-7a3413c7682e"
+          "id": "5e23ee67-ab0c-43dc-b1c0-179780fd0ee5"
         },
         {
           "x": 1.7,
           "y": 5.1,
           "rotation": 0.0,
-          "id": "d24a7385-1fea-4712-bac3-8c498d5afb4e"
+          "id": "cebd1b38-3b8c-499d-bbfc-0353e5645a4b"
         },
         {
           "x": 1.6,
           "y": 6.046,
           "rotation": 0.0,
-          "id": "fe1d0df1-8d29-4a6b-91b3-d68bc77ff55e"
+          "id": "036a914f-cbb0-4473-8ca9-7af1a213fe1e"
         },
         {
           "x": 2.904,
           "y": 7.02,
           "rotation": 20.0,
-          "id": "1d42d95e-593a-4630-a926-1fa487166246"
+          "id": "ca5f2a6f-3e4d-4b70-9651-a939ca89b481"
         },
         {
           "x": 1.5,
           "y": 5.555,
           "rotation": 0.0,
-          "id": "dd133cbb-bf05-437a-b420-8eb80a24e029"
+          "id": "fdd8dc0e-cdcb-44d4-95e5-1a8028863601"
         },
         {
           "x": 2.661,
           "y": 4.111,
           "rotation": 0.0,
-          "id": "99b21b50-dc83-4101-a6ca-ac48ed34475f"
+          "id": "bcea2382-03fa-47ed-be19-8e558e896f88"
         },
         {
           "x": 1.5,
           "y": 5.561,
           "rotation": 0.0,
-          "id": "0b1824d7-ba0a-44a6-8bcf-0b1a62ef0118"
+          "id": "53000679-7252-4003-8cd4-a787a92e9b93"
         }
       ]
     },
     {
       "name": "Path 2",
-      "id": "9e2b2fe1-3af0-4159-ac55-4bae2c1e4f91",
+      "id": "9db384ba-5a1f-43f1-bc5b-dfd3ba1ca29f",
       "isSpline": true,
       "maxVelocity": 4.0,
       "inVelocity": 0.0,
@@ -79,56 +79,49 @@
           "x": 1.5,
           "y": 5.561,
           "rotation": 0.0,
-          "id": "1a47e400-6227-40e9-a3c3-801792a8b898"
+          "id": "3d3b74e1-6767-415e-b154-6ad1ab9b9d0a"
         },
         {
           "x": 3.061,
           "y": 5.277,
           "rotation": 0.0,
-          "id": "0b14c0c2-349f-4aca-8262-fb9c596aa3f0"
+          "id": "8287b77e-2ac2-4f8d-9fa2-a953b030e904"
         },
         {
           "x": 4.773,
           "y": 4.66,
           "rotation": 0.0,
-          "id": "267dceab-5593-4633-9175-2e59c0ca55ea"
+          "id": "d77d05d4-3299-4273-98a2-385d0d6fc53c"
         },
         {
           "x": 6.37,
           "y": 4.344,
           "rotation": 5.0,
-          "id": "d830dadc-9773-4fd3-a3ba-c6ab73a534d8"
-        }
-      ]
-    },
-    {
-      "name": "Path 3",
-      "id": "87d0d1bf-ad17-4b84-8548-5e974f39c847",
-      "isSpline": true,
-      "maxVelocity": 4.0,
-      "inVelocity": 0.0,
-      "outVelocity": 0.0,
-      "maxAcceleration": 3.0,
-      "maxCentripetalAcceleration": 3.5,
-      "snapToPrevious": false,
-      "points": [
+          "id": "2b2dfdb5-1cce-49dc-8c0f-33dc31917864"
+        },
+        {
+          "x": 8.267,
+          "y": 4.399,
+          "rotation": 10.0,
+          "id": "b3cb0bff-54df-4d29-a110-de7bab31d068"
+        },
         {
           "x": 7.383,
           "y": 5.373,
           "rotation": 0.0,
-          "id": "b20fb11e-3e91-454e-9c90-7a83fd3b6227"
+          "id": "1855cd86-eb4f-465d-ab41-fd350d2f9de1"
         },
         {
           "x": 5.343,
           "y": 6.32,
           "rotation": -5.0,
-          "id": "a50d79be-4159-4490-8c68-26b87b25a0c0"
+          "id": "b1ba8b06-0de9-4109-b4ef-e6f004fd7292"
         },
         {
           "x": 3.48,
           "y": 5.6,
           "rotation": 0.0,
-          "id": "cb7a2615-febc-4c25-b877-18ca78586777"
+          "id": "15635181-ebc6-4dee-bac0-8444b07946b8"
         }
       ]
     }

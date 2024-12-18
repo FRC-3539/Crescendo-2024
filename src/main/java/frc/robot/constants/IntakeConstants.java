@@ -19,6 +19,6 @@ public class IntakeConstants extends BBConstants {
 	public static double kickWheelDiameter = 1.625;
 	public static double chamberWheelDiameter = 1.625;
 	public static double kickGearRatio = 1.2;
-	public static double intakeShutOffDelay = 0.15;
+	public static double intakeShutOffDelay = 0.125;
 	public static int invertSensors = 1;
-}
+}

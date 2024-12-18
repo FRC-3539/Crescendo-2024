@@ -161,6 +161,17 @@ public class LedSubsystem extends SubsystemBase {
 			setLEDs(LEDState.ERROR);
 			return;
 		}
+		if (intaking) {
+			if (IntakeSubsystem.getChamberSensor()) {
+
+				setLEDs(LEDState.INTAKING);
+				return;
+
+			} else {
+				setLEDs(LEDState.INTAKING_EMPTY);
+				return;
+			}
+		}
 		if (aligning) {
 			setLEDs(LEDState.AUTO);
 			return;
@@ -207,17 +218,7 @@ public class LedSubsystem extends SubsystemBase {
 			setLEDs(LEDState.BACK);
 			return;
 		}
-		if (intaking) {
-			if (IntakeSubsystem.getChamberSensor()) {
-
-				setLEDs(LEDState.INTAKING);
-				return;
-
-			} else {
-				setLEDs(LEDState.INTAKING_EMPTY);
-				return;
-			}
-		}
+		
 
 		setLEDs(LEDState.CONNECTED);
 	}

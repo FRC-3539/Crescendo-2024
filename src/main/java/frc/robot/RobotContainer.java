@@ -150,6 +150,8 @@ public class RobotContainer {
 
 		operatorController.povRight().onTrue(new HomePositionCommand());
 
+		driverController.povDown().onTrue(new InvertBackLeftDriveMotor());
+
 		// operatorController.start().whileTrue(new BuddyClimbCommand());
 		driverController.start().whileTrue(new ZeroGyroCommand());
 		driverController.y().whileTrue(new AutoAlignCommand(TagPosition.AMP));

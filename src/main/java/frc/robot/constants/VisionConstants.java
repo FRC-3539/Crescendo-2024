@@ -8,4 +8,4 @@ public class VisionConstants extends BBConstants {
 		save();
 	}
 
-}
+}
