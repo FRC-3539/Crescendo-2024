@@ -172,10 +172,10 @@ public class LedSubsystem extends SubsystemBase {
 			setLEDs(LEDState.AUTO);
 			return;
 		}
-		if (RobotContainer.climberSubsystem.doneClimbing()) {
-			setLEDs(LEDState.CLIMBING);
-			return;
-		}
+		// if (RobotContainer.climberSubsystem.doneClimbing()) {
+		// setLEDs(LEDState.CLIMBING);
+		// return;
+		// }
 		if (reverseClimbing) {
 			setLEDs(LEDState.REVERSE_CLIMBING);
 			return;
@@ -191,36 +191,37 @@ public class LedSubsystem extends SubsystemBase {
 		}
 		// This method will be called once per scheduler run
 		// setLEDs(LEDState.READY);
-		if (RobotContainer.shooterSubsystem.getShooterSensor()) {
-			setLEDs(LEDState.PREPARED);
-			return;
-		} else {
-			if (RobotContainer.intakeSubsystem.getChamberSensor()) {
-				setLEDs(LEDState.INTAKING);
-				return;
-			}
-		}
-		if (RobotContainer.intakeSubsystem.getFrontSensor()) {
+		// if (RobotContainer.shooterSubsystem.getShooterSensor()) {
+		// setLEDs(LEDState.PREPARED);
+		// return;
+		// }
+		// else {
+		// if (RobotContainer.intakeSubsystem.getChamberSensor()) {
+		// setLEDs(LEDState.INTAKING);
+		// return;
+		// }
+		// }
+		// if (RobotContainer.intakeSubsystem.getFrontSensor()) {
 
-			setLEDs(LEDState.FRONT);
-			return;
+		// setLEDs(LEDState.FRONT);
+		// return;
 
-		} else if (RobotContainer.intakeSubsystem.getBackSensor()) {
+		// } else if (RobotContainer.intakeSubsystem.getBackSensor()) {
 
-			setLEDs(LEDState.BACK);
-			return;
-		}
-		if (this.intaking) {
-			if (RobotContainer.intakeSubsystem.getChamberSensor()) {
+		// setLEDs(LEDState.BACK);
+		// return;
+		// }
+		// if (this.intaking) {
+		// if (RobotContainer.intakeSubsystem.getChamberSensor()) {
 
-				setLEDs(LEDState.INTAKING);
-				return;
+		// setLEDs(LEDState.INTAKING);
+		// return;
 
-			} else {
-				setLEDs(LEDState.INTAKING_EMPTY);
-				return;
-			}
-		}
+		// } else {
+		// setLEDs(LEDState.INTAKING_EMPTY);
+		// return;
+		// }
+		// }
 
 		setLEDs(LEDState.CONNECTED);
 	}

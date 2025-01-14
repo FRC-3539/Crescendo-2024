@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
-import frc.robot.commands.FollowTrajectoryCommand;
-import frc.robot.commands.RevUpCommand;
-import frc.robot.commands.ShootCommand;
+// import frc.robot.commands.FollowTrajectoryCommand;
+// import frc.robot.commands.RevUpCommand;
+// import frc.robot.commands.ShootCommand;
 import frc.robot.constants.ShooterConstants;
 import org.frcteam3539.Byte_Swerve_Lib.io.BBMPLoader;
 
@@ -22,15 +22,15 @@ import org.frcteam3539.Byte_Swerve_Lib.io.BBMPLoader;
 public class RedShootDrive extends SequentialCommandGroup {
 	BBMPLoader loader = new BBMPLoader("/home/lvuser/profiles/RedShootDrive.txt", false);
 
-	private Command[] sequence = {
-			new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
-			new ParallelCommandGroup(new RevUpCommand(true, ShooterConstants.shootDps).withTimeout(2),
-					new SequentialCommandGroup(new WaitCommand(1), new ShootCommand().withTimeout(1),
-							new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem,
-									loader.getNextTrajectory())))};
+	// private Command[] sequence = {
+	// 		new InstantCommand(() -> RobotContainer.drivetrainSubsystem.seedFieldRelative(loader.getFirstTrajectory())),
+	// 		new ParallelCommandGroup(new RevUpCommand(true, ShooterConstants.shootDps).withTimeout(2),
+	// 				new SequentialCommandGroup(new WaitCommand(1), new ShootCommand().withTimeout(1),
+	// 						new FollowTrajectoryCommand(RobotContainer.drivetrainSubsystem,
+	// 								loader.getNextTrajectory())))};
 
 	/** Creates a new RedShootDrive. */
 	public RedShootDrive() {
-		addCommands(sequence);
+		// addCommands(sequence);
 	}
 }
