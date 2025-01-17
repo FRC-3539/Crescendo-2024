@@ -90,8 +90,9 @@ public class RobotContainer {
 	}
 	private void configureBindings() {
 		driverController.start().whileTrue(new ZeroGyroCommand());
-
+		operatorController.rightBumper().whileTrue(new FeedCommand(5));
 		drivetrainSubsystem.setDefaultCommand(new DriveCommand());
+		operatorController.leftBumper().whileTrue(new ShootCommand(5, false));
 	}
 
 	public void putCommands() {
