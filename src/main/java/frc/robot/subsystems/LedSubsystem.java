@@ -14,9 +14,7 @@ import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
 import com.ctre.phoenix.led.StrobeAnimation;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.constants.IDConstants;
 import frc.robot.constants.LedConstants;
 
@@ -148,81 +146,83 @@ public class LedSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		if (DriverStation.isAutonomous() && !RobotContainer.visionSubsystem.backLeftCam.isConnected()
-				&& !RobotContainer.visionSubsystem.backRightCam.isConnected()) {
-			setLEDs(LEDState.ERROR);
-			return;
-		}
-		if (autoShooting && !RobotContainer.visionSubsystem.backLeftCam.isConnected()
-				&& !RobotContainer.visionSubsystem.backRightCam.isConnected()) {
-			setLEDs(LEDState.ERROR);
-			return;
-		}
-		if (shootAligning && !RobotContainer.visionSubsystem.backLeftCam.isConnected()
-				&& !RobotContainer.visionSubsystem.backRightCam.isConnected()) {
-			setLEDs(LEDState.ERROR);
-			return;
-		}
-		if (aligning) {
-			setLEDs(LEDState.AUTO);
-			return;
-		}
-
-		if (shootAligning) {
-			setLEDs(LEDState.AUTO);
-			return;
-		}
-		// if (RobotContainer.climberSubsystem.doneClimbing()) {
-		// setLEDs(LEDState.CLIMBING);
+		// if (DriverStation.isAutonomous() &&
+		// !RobotContainer.visionSubsystem.backLeftCam.isConnected()
+		// && !RobotContainer.visionSubsystem.backRightCam.isConnected()) {
+		// setLEDs(LEDState.ERROR);
 		// return;
 		// }
-		if (reverseClimbing) {
-			setLEDs(LEDState.REVERSE_CLIMBING);
-			return;
-		}
-		if (noteTracking) {
-			if (!RobotContainer.visionSubsystem.backNoteCam.isConnected()
-					|| !RobotContainer.visionSubsystem.frontNoteCam.isConnected()) {
-				setLEDs(LEDState.ERROR);
-				return;
-			}
-			setLEDs(LEDState.AUTO);
-			return;
-		}
-		// This method will be called once per scheduler run
-		// setLEDs(LEDState.READY);
-		// if (RobotContainer.shooterSubsystem.getShooterSensor()) {
-		// setLEDs(LEDState.PREPARED);
+		// if (autoShooting && !RobotContainer.visionSubsystem.backLeftCam.isConnected()
+		// && !RobotContainer.visionSubsystem.backRightCam.isConnected()) {
+		// setLEDs(LEDState.ERROR);
 		// return;
 		// }
-		// else {
-		// if (RobotContainer.intakeSubsystem.getChamberSensor()) {
-		// setLEDs(LEDState.INTAKING);
+		// if (shootAligning &&
+		// !RobotContainer.visionSubsystem.backLeftCam.isConnected()
+		// && !RobotContainer.visionSubsystem.backRightCam.isConnected()) {
+		// setLEDs(LEDState.ERROR);
 		// return;
 		// }
-		// }
-		// if (RobotContainer.intakeSubsystem.getFrontSensor()) {
-
-		// setLEDs(LEDState.FRONT);
-		// return;
-
-		// } else if (RobotContainer.intakeSubsystem.getBackSensor()) {
-
-		// setLEDs(LEDState.BACK);
+		// if (aligning) {
+		// setLEDs(LEDState.AUTO);
 		// return;
 		// }
-		// if (this.intaking) {
-		// if (RobotContainer.intakeSubsystem.getChamberSensor()) {
 
-		// setLEDs(LEDState.INTAKING);
-		// return;
-
-		// } else {
-		// setLEDs(LEDState.INTAKING_EMPTY);
+		// if (shootAligning) {
+		// setLEDs(LEDState.AUTO);
 		// return;
 		// }
+		// // if (RobotContainer.climberSubsystem.doneClimbing()) {
+		// // setLEDs(LEDState.CLIMBING);
+		// // return;
+		// // }
+		// if (reverseClimbing) {
+		// setLEDs(LEDState.REVERSE_CLIMBING);
+		// return;
 		// }
+		// if (noteTracking) {
+		// if (!RobotContainer.visionSubsystem.backNoteCam.isConnected()
+		// || !RobotContainer.visionSubsystem.frontNoteCam.isConnected()) {
+		// setLEDs(LEDState.ERROR);
+		// return;
+		// }
+		// setLEDs(LEDState.AUTO);
+		// return;
+		// }
+		// // This method will be called once per scheduler run
+		// // setLEDs(LEDState.READY);
+		// // if (RobotContainer.shooterSubsystem.getShooterSensor()) {
+		// // setLEDs(LEDState.PREPARED);
+		// // return;
+		// // }
+		// // else {
+		// // if (RobotContainer.intakeSubsystem.getChamberSensor()) {
+		// // setLEDs(LEDState.INTAKING);
+		// // return;
+		// // }
+		// // }
+		// // if (RobotContainer.intakeSubsystem.getFrontSensor()) {
 
-		setLEDs(LEDState.CONNECTED);
+		// // setLEDs(LEDState.FRONT);
+		// // return;
+
+		// // } else if (RobotContainer.intakeSubsystem.getBackSensor()) {
+
+		// // setLEDs(LEDState.BACK);
+		// // return;
+		// // }
+		// // if (this.intaking) {
+		// // if (RobotContainer.intakeSubsystem.getChamberSensor()) {
+
+		// // setLEDs(LEDState.INTAKING);
+		// // return;
+
+		// // } else {
+		// // setLEDs(LEDState.INTAKING_EMPTY);
+		// // return;
+		// // }
+		// // }
+
+		// setLEDs(LEDState.CONNECTED);
 	}
 }

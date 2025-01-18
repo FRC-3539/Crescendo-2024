@@ -94,6 +94,8 @@ public class RobotContainer {
 		drivetrainSubsystem.setDefaultCommand(new DriveCommand());
 		operatorController.leftBumper().whileTrue(new ShootCommand(5, false));
 		operatorController.leftTrigger().whileTrue(new IntakeCommand());
+		operatorController.povDown().whileTrue(new ReverseClimbCommand());
+		operatorController.povUp().whileTrue(new ClimbCommand());
 	}
 
 	public void putCommands() {

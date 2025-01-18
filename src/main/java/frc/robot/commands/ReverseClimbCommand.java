@@ -7,9 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
-public class IntakeCommand extends Command {
+public class ReverseClimbCommand extends Command {
 
-	public IntakeCommand() {
+	private double shootSpeed;
+
+	public ReverseClimbCommand() {
 	}
 
 	// Called when the command is initially scheduled.
@@ -20,22 +22,20 @@ public class IntakeCommand extends Command {
 	// Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-		RobotContainer.intakeSubsystem.setchamberVoltage(10);
-		RobotContainer.intakeSubsystem.setgroundMotorVoltage(10);
-		RobotContainer.intakeSubsystem.setkickVoltage(10);
+		RobotContainer.climberSubsystem.setrightclimbMotorVoltage(-2);
+		RobotContainer.climberSubsystem.setleftclimbMotorVoltage(2);
 	}
 
 	// Called once the command ends or is interrupted.
 	@Override
 	public void end(boolean interrupted) {
-		RobotContainer.intakeSubsystem.setgroundMotorVoltage(0);
-		RobotContainer.intakeSubsystem.setchamberVoltage(0);
-		RobotContainer.intakeSubsystem.setkickVoltage(0);
+		RobotContainer.climberSubsystem.setrightclimbMotorVoltage(0);
+		RobotContainer.climberSubsystem.setleftclimbMotorVoltage(0);
 	}
 
 	// Returns true when the command should end.
 	@Override
 	public boolean isFinished() {
-		return RobotContainer.shooterSubsystem.getshootersensor();
+		return false;
 	}
 }
