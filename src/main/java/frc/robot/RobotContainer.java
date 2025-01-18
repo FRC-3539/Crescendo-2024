@@ -93,6 +93,7 @@ public class RobotContainer {
 		operatorController.rightBumper().whileTrue(new FeedCommand(5));
 		drivetrainSubsystem.setDefaultCommand(new DriveCommand());
 		operatorController.leftBumper().whileTrue(new ShootCommand(5, false));
+		operatorController.leftTrigger().whileTrue(new IntakeCommand());
 	}
 
 	public void putCommands() {
